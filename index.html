@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Image Generator</title>
+</head>
+<body>
+  <h2>Enter a prompt</h2>
+  <input type="text" id="prompt" placeholder="e.g. A robot in space">
+  <button onclick="generate()">Generate</button>
+  <br><br>
+  <img id="output" width="300">
+
+  <script>
+    async function generate() {
+      const prompt = document.getElementById("prompt").value;
+
+      const response = await fetch("/.netlify/functions/generate-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        document.getElementById("output").src = data.url;
+      } else {
+        alert("Image generation failed");
+      }
+    }
+  </script>
+</body>
+</html>
